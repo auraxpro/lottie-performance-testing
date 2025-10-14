@@ -1,0 +1,233 @@
+# =====================================================
+# LOTTIE PERFORMANCE OPTIMIZATION - .htaccess Rules
+# =====================================================
+# Add these rules to your WordPress .htaccess file
+# Location: /public_html/.htaccess (or site root)
+# =====================================================
+
+# =====================================================
+# 1. CACHE CONTROL FOR LOTTIE FILES
+# =====================================================
+# Cache Lottie files for 1 year (they won't change)
+# This dramatically improves repeat visit performance
+
+<IfModule mod_headers.c>
+    # Cache JSON animation files for 1 year
+    <FilesMatch "\.(json)$">
+        Header set Cache-Control "max-age=31536000, public, immutable"
+        Header set Expires "Thu, 31 Dec 2037 23:55:55 GMT"
+    </FilesMatch>
+
+    # Cache Lottie JavaScript library for 1 year
+    <FilesMatch "lottie\.min\.js$">
+        Header set Cache-Control "max-age=31536000, public, immutable"
+        Header set Expires "Thu, 31 Dec 2037 23:55:55 GMT"
+    </FilesMatch>
+
+    # Alternative: Cache all JS files in assets folder
+    <FilesMatch "^assets/.*\.(js)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
+</IfModule>
+
+# =====================================================
+# 2. GZIP COMPRESSION
+# =====================================================
+# Compress JSON and JS files to reduce transfer size
+# Typical compression: 70-80% size reduction
+
+<IfModule mod_deflate.c>
+    # Compress JSON files (Lottie animations)
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE text/json
+    
+    # Compress JavaScript files
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE text/javascript
+    
+    # Also compress HTML, CSS, XML
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    
+    # Compress fonts
+    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+    AddOutputFilterByType DEFLATE font/ttf
+    AddOutputFilterByType DEFLATE font/opentype
+    AddOutputFilterByType DEFLATE font/otf
+    AddOutputFilterByType DEFLATE font/eot
+    
+    # Don't compress images (already compressed)
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|webp)$ no-gzip dont-vary
+</IfModule>
+
+# =====================================================
+# 3. BROTLI COMPRESSION (If Available)
+# =====================================================
+# Brotli provides even better compression than Gzip
+# Check if your host supports it: Apache 2.4.26+
+
+<IfModule mod_brotli.c>
+    AddOutputFilterByType BROTLI_COMPRESS application/json
+    AddOutputFilterByType BROTLI_COMPRESS application/javascript
+    AddOutputFilterByType BROTLI_COMPRESS text/javascript
+    AddOutputFilterByType BROTLI_COMPRESS text/html
+    AddOutputFilterByType BROTLI_COMPRESS text/css
+    AddOutputFilterByType BROTLI_COMPRESS text/xml
+    AddOutputFilterByType BROTLI_COMPRESS application/xml
+</IfModule>
+
+# =====================================================
+# 4. VARY HEADER
+# =====================================================
+# Ensures proper cache behavior for compressed files
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(js|css|xml|json|gz|html)$">
+        Header append Vary: Accept-Encoding
+    </FilesMatch>
+</IfModule>
+
+# =====================================================
+# 5. ETags (Optional but Recommended)
+# =====================================================
+# Enable ETags for better cache validation
+
+<IfModule mod_headers.c>
+    # Remove ETag (use Last-Modified instead)
+    Header unset ETag
+</IfModule>
+FileETag None
+
+# =====================================================
+# 6. MIME TYPES
+# =====================================================
+# Ensure correct MIME types for Lottie files
+
+<IfModule mod_mime.c>
+    # JSON files
+    AddType application/json .json
+    
+    # JavaScript
+    AddType application/javascript .js
+    
+    # Fonts (if using in Lottie)
+    AddType font/woff2 .woff2
+    AddType font/woff .woff
+    AddType font/ttf .ttf
+    AddType font/eot .eot
+    AddType font/otf .otf
+</IfModule>
+
+# =====================================================
+# 7. PREVENT HOTLINKING (Optional)
+# =====================================================
+# Prevent other sites from embedding your Lottie files
+# Uncomment if you want to protect your animations
+
+# <IfModule mod_rewrite.c>
+#     RewriteEngine On
+#     RewriteCond %{HTTP_REFERER} !^$
+#     RewriteCond %{HTTP_REFERER} !^https?://(www\.)?yoursite\.com [NC]
+#     RewriteRule \.(json)$ - [F,L]
+# </IfModule>
+
+# =====================================================
+# 8. SECURITY HEADERS (Optional but Recommended)
+# =====================================================
+# Add security headers for better protection
+
+<IfModule mod_headers.c>
+    # Prevent MIME type sniffing
+    Header set X-Content-Type-Options "nosniff"
+    
+    # XSS Protection
+    Header set X-XSS-Protection "1; mode=block"
+    
+    # Clickjacking protection
+    Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# =====================================================
+# 9. CORS HEADERS (If Needed)
+# =====================================================
+# Only needed if loading animations from external domains
+# Uncomment and adjust if necessary
+
+# <IfModule mod_headers.c>
+#     <FilesMatch "\.(json)$">
+#         Header set Access-Control-Allow-Origin "*"
+#         Header set Access-Control-Allow-Methods "GET, OPTIONS"
+#     </FilesMatch>
+# </IfModule>
+
+# =====================================================
+# 10. DISABLE DIRECTORY BROWSING
+# =====================================================
+# Prevent listing of animation files directory
+
+Options -Indexes
+
+# =====================================================
+# TESTING YOUR CONFIGURATION
+# =====================================================
+# After adding these rules, test with:
+#
+# 1. Check cache headers:
+#    curl -I https://yoursite.com/wp-content/uploads/animations/file.json
+#    Should show: Cache-Control: max-age=31536000
+#
+# 2. Check compression:
+#    curl -H "Accept-Encoding: gzip" -I https://yoursite.com/path/to/lottie.min.js
+#    Should show: Content-Encoding: gzip
+#
+# 3. Performance test:
+#    https://gtmetrix.com/
+#    https://pagespeed.web.dev/
+#
+# =====================================================
+# TROUBLESHOOTING
+# =====================================================
+# If rules don't work:
+#
+# 1. Check if mod_headers is enabled:
+#    Contact your host or check phpinfo()
+#
+# 2. Check if mod_deflate is enabled:
+#    Same as above
+#
+# 3. Make sure .htaccess is being read:
+#    Add a simple rule and test
+#
+# 4. Check for conflicting rules:
+#    Review existing .htaccess content
+#
+# 5. Server type:
+#    These rules are for Apache
+#    For Nginx, use different config
+#
+# =====================================================
+
+# =====================================================
+# EXPECTED PERFORMANCE IMPROVEMENTS
+# =====================================================
+#
+# Cache Control:
+#   - First visit: No change
+#   - Repeat visits: -30KB (no download), -200ms (no request)
+#
+# Gzip Compression:
+#   - JSON files: 70-80% size reduction
+#   - lottie.min.js: ~96KB → ~30KB
+#   - Total savings: ~50KB per page load
+#
+# Combined Effect:
+#   - PageSpeed score: +2-3 points
+#   - Load time: -300-500ms
+#   - Bandwidth: -50KB per page
+#
+# =====================================================
+

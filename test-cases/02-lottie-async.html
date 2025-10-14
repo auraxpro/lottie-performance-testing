@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Case 2: Lottie - Async Loading</title>
+    <meta name="description" content="Lottie with async script loading">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .test-info {
+            background: #fff3e0;
+            padding: 20px;
+            border-bottom: 3px solid #ff9800;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 { margin-bottom: 10px; }
+        .meta { color: #666; font-size: 14px; }
+        .improvement { background: #e8f5e9; padding: 15px; margin: 20px 0; border-left: 4px solid #4CAF50; }
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            margin: 40px 0;
+        }
+        .hero h2 { font-size: 48px; margin-bottom: 20px; }
+        .hero p { font-size: 20px; opacity: 0.9; }
+        .animation-container {
+            width: 400px;
+            height: 400px;
+            margin: 30px auto;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            padding: 60px 0;
+        }
+        .feature {
+            text-align: center;
+            padding: 30px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        .feature-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+        .feature h3 { margin-bottom: 10px; }
+        .cta {
+            text-align: center;
+            padding: 80px 20px;
+            background: #f5f5f5;
+        }
+        .cta-icon {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+    
+    <!-- IMPROVEMENT #1: Resource hints for faster connection -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+</head>
+<body>
+    <div class="test-info">
+        <div class="container">
+            <h1>Test Case 2: Lottie - Async Loading ⚡</h1>
+            <p class="meta">
+                <strong>Method:</strong> Async script loading with deferred initialization<br>
+                <strong>Purpose:</strong> Fix render-blocking issue from Test Case 1<br>
+                <strong>Animations:</strong> 10 total (1 hero + 8 features + 1 CTA)<br>
+                <strong>Expected Score:</strong> 90-93% (GTmetrix Grade A)<br>
+                <strong>Improvements:</strong> Non-blocking script, resource hints, deferred init
+            </p>
+            <div class="improvement">
+                ✅ <strong>Optimizations Applied:</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Async script loading (no render blocking)</li>
+                    <li>Resource hints (preconnect, DNS prefetch)</li>
+                    <li>Initialization deferred until DOMContentLoaded</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="container">
+            <div class="animation-container" id="hero-animation"></div>
+            <h2>Welcome to Our Platform</h2>
+            <p>Experience lightning-fast performance with beautiful animations</p>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container">
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon" id="feature-1"></div>
+                <h3>Fast Performance</h3>
+                <p>Lightning quick load times</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon" id="feature-2"></div>
+                <h3>Easy to Use</h3>
+                <p>Intuitive interface</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon" id="feature-3"></div>
+                <h3>Secure</h3>
+                <p>Enterprise-grade security</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon" id="feature-4"></div>
+                <h3>Reliable</h3>
+                <p>99.9% uptime guaranteed</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon" id="feature-5"></div>
+                <h3>Scalable</h3>
+                <p>Grows with your business</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon" id="feature-6"></div>
+                <h3>Modern</h3>
+                <p>Latest technology stack</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon" id="feature-7"></div>
+                <h3>Flexible</h3>
+                <p>Customizable solutions</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon" id="feature-8"></div>
+                <h3>Support</h3>
+                <p>24/7 customer service</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta">
+        <div class="container">
+            <div class="cta-icon" id="cta-animation"></div>
+            <h2>Ready to Get Started?</h2>
+            <p>Join thousands of satisfied customers</p>
+            <a href="#" class="cta-button">Start Free Trial</a>
+        </div>
+    </div>
+
+    <!-- IMPROVEMENT #2: Async script loading (non-blocking) -->
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+
+    <!-- IMPROVEMENT #3: Deferred initialization -->
+    <script>
+        // Wait for both DOM and Lottie to be ready
+        function initLottieAnimations() {
+            if (typeof lottie === 'undefined') {
+                setTimeout(initLottieAnimations, 50);
+                return;
+            }
+
+            const animations = [
+                'https://assets4.lottiefiles.com/packages/lf20_DMgKk1.json',
+                'https://assets2.lottiefiles.com/packages/lf20_UJNc2t.json',
+                'https://assets5.lottiefiles.com/packages/lf20_kd1WLV.json',
+                'https://assets9.lottiefiles.com/packages/lf20_XkrWkg.json',
+                'https://assets3.lottiefiles.com/packages/lf20_khzniaya.json',
+                'https://assets10.lottiefiles.com/packages/lf20_w51pcehl.json',
+                'https://assets8.lottiefiles.com/packages/lf20_swnrn2oy.json',
+                'https://assets7.lottiefiles.com/packages/lf20_svy4ivvd.json'
+            ];
+
+            const containers = [
+                'hero-animation',
+                'feature-1', 'feature-2', 'feature-3', 'feature-4',
+                'feature-5', 'feature-6', 'feature-7', 'feature-8',
+                'cta-animation'
+            ];
+
+            containers.forEach((containerId, index) => {
+                const animPath = animations[index % animations.length];
+                lottie.loadAnimation({
+                    container: document.getElementById(containerId),
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: true,
+                    path: animPath,
+                    rendererSettings: {
+                        progressiveLoad: true
+                    }
+                });
+            });
+        }
+
+        // Initialize after DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                requestAnimationFrame(initLottieAnimations);
+            });
+        } else {
+            requestAnimationFrame(initLottieAnimations);
+        }
+    </script>
+
+    <!-- Back to Index Navigation -->
+    <script src="back-to-index.js"></script>
+    
+    <!-- Performance Monitoring -->
+    <script>
+        window.addEventListener('load', function() {
+            if (performance.getEntriesByType) {
+                const perfData = performance.getEntriesByType('navigation')[0];
+                if (perfData) {
+                    console.log('=== TEST CASE 2: Lottie with Async Loading ===');
+                    console.log('DOM Content Loaded:', Math.round(perfData.domContentLoadedEventEnd) + 'ms');
+                    console.log('Page Load Complete:', Math.round(perfData.loadEventEnd) + 'ms');
+                    console.log('Total Page Size:', Math.round(perfData.transferSize / 1024) + 'KB');
+                    console.log('');
+                    console.log('✅ IMPROVEMENTS vs Test Case 1:');
+                    console.log('  1. Async script loading (no render blocking)');
+                    console.log('  2. Resource hints (preconnect, DNS prefetch)');
+                    console.log('  3. Deferred initialization (waits for DOM)');
+                    console.log('');
+                    console.log('⚠️ STILL MISSING:');
+                    console.log('  - Lazy loading for below-fold animations');
+                    console.log('');
+                    console.log('Next Step: Test at https://gtmetrix.com/');
+                    console.log('Expected Score: 90-93% (Grade A)');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+

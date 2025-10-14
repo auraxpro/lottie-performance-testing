@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Case 3: Lottie - Lazy Loading with Intersection Observer</title>
+    <meta name="description" content="Lottie with lazy loading for below-fold animations">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .test-info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-bottom: 3px solid #2196F3;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 { margin-bottom: 10px; }
+        .meta { color: #666; font-size: 14px; }
+        .improvement { background: #e8f5e9; padding: 15px; margin: 20px 0; border-left: 4px solid #4CAF50; }
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            margin: 40px 0;
+        }
+        .hero h2 { font-size: 48px; margin-bottom: 20px; }
+        .hero p { font-size: 20px; opacity: 0.9; }
+        .animation-container {
+            width: 400px;
+            height: 400px;
+            margin: 30px auto;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            padding: 60px 0;
+        }
+        .feature {
+            text-align: center;
+            padding: 30px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        .feature-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        .feature-icon.loading::after {
+            content: 'Loading...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            color: #999;
+        }
+        .feature h3 { margin-bottom: 10px; }
+        .cta {
+            text-align: center;
+            padding: 80px 20px;
+            background: #f5f5f5;
+        }
+        .cta-icon {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+    
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+</head>
+<body>
+    <div class="test-info">
+        <div class="container">
+            <h1>Test Case 3: Lottie - Lazy Loading 🎯</h1>
+            <p class="meta">
+                <strong>Method:</strong> Intersection Observer for lazy loading below-fold animations<br>
+                <strong>Purpose:</strong> Reduce initial page load by only loading visible animations<br>
+                <strong>Animations:</strong> 10 total (1 immediate + 9 lazy-loaded)<br>
+                <strong>Expected Score:</strong> 92-94% (GTmetrix Grade A)<br>
+                <strong>Improvements:</strong> Lazy loading, resource hints
+            </p>
+            <div class="improvement">
+                ✅ <strong>Optimizations Applied:</strong>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Hero animation loads immediately (above fold)</li>
+                    <li>Other 9 animations lazy load when scrolled into view</li>
+                    <li>Intersection Observer for efficient lazy loading</li>
+                    <li>Resource hints for faster connections</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section (Above the fold - loads immediately) -->
+    <div class="hero">
+        <div class="container">
+            <div class="animation-container" id="hero-animation"></div>
+            <h2>Welcome to Our Platform</h2>
+            <p>Scroll down to see lazy-loaded animations</p>
+        </div>
+    </div>
+
+    <!-- Features Section (Below the fold - lazy loads) -->
+    <div class="container">
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon loading" data-lottie-lazy data-anim-index="0"></div>
+                <h3>Fast Performance</h3>
+                <p>Lightning quick load times</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon loading" data-lottie-lazy data-anim-index="1"></div>
+                <h3>Easy to Use</h3>
+                <p>Intuitive interface</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon loading" data-lottie-lazy data-anim-index="2"></div>
+                <h3>Secure</h3>
+                <p>Enterprise-grade security</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon loading" data-lottie-lazy data-anim-index="3"></div>
+                <h3>Reliable</h3>
+                <p>99.9% uptime guaranteed</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon loading" data-lottie-lazy data-anim-index="4"></div>
+                <h3>Scalable</h3>
+                <p>Grows with your business</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon loading" data-lottie-lazy data-anim-index="5"></div>
+                <h3>Modern</h3>
+                <p>Latest technology stack</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon loading" data-lottie-lazy data-anim-index="6"></div>
+                <h3>Flexible</h3>
+                <p>Customizable solutions</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon loading" data-lottie-lazy data-anim-index="7"></div>
+                <h3>Support</h3>
+                <p>24/7 customer service</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section (Below the fold - lazy loads) -->
+    <div class="cta">
+        <div class="container">
+            <div class="cta-icon loading" data-lottie-lazy data-anim-index="8"></div>
+            <h2>Ready to Get Started?</h2>
+            <p>Join thousands of satisfied customers</p>
+            <a href="#" class="cta-button">Start Free Trial</a>
+        </div>
+    </div>
+
+    <!-- NOTE: Still using synchronous loading for comparison -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+
+    <!-- Lazy Loading Implementation -->
+    <script>
+        const animations = [
+            'https://assets2.lottiefiles.com/packages/lf20_UJNc2t.json',
+            'https://assets5.lottiefiles.com/packages/lf20_kd1WLV.json',
+            'https://assets9.lottiefiles.com/packages/lf20_XkrWkg.json',
+            'https://assets3.lottiefiles.com/packages/lf20_khzniaya.json',
+            'https://assets10.lottiefiles.com/packages/lf20_w51pcehl.json',
+            'https://assets8.lottiefiles.com/packages/lf20_swnrn2oy.json',
+            'https://assets7.lottiefiles.com/packages/lf20_svy4ivvd.json',
+            'https://assets4.lottiefiles.com/packages/lf20_DMgKk1.json'
+        ];
+
+        let loadedCount = 0;
+
+        // Load hero animation immediately (above the fold)
+        lottie.loadAnimation({
+            container: document.getElementById('hero-animation'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: animations[0]
+        });
+        console.log('✅ Loaded hero animation (immediate)');
+
+        // Setup Intersection Observer for lazy loading
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const container = entry.target;
+                    const animIndex = parseInt(container.dataset.animIndex);
+                    
+                    // Remove loading state
+                    container.classList.remove('loading');
+                    
+                    // Load animation
+                    lottie.loadAnimation({
+                        container: container,
+                        renderer: 'svg',
+                        loop: true,
+                        autoplay: true,
+                        path: animations[animIndex],
+                        rendererSettings: {
+                            progressiveLoad: true
+                        }
+                    });
+                    
+                    loadedCount++;
+                    console.log(`✅ Lazy loaded animation ${loadedCount}/9`);
+                    
+                    // Stop observing this element
+                    observer.unobserve(container);
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '50px', // Start loading 50px before visible
+            threshold: 0.01
+        });
+
+        // Observe all lazy containers
+        document.querySelectorAll('[data-lottie-lazy]').forEach(container => {
+            observer.observe(container);
+        });
+    </script>
+
+    <!-- Back to Index Navigation -->
+    <script src="back-to-index.js"></script>
+    
+    <!-- Performance Monitoring -->
+    <script>
+        window.addEventListener('load', function() {
+            if (performance.getEntriesByType) {
+                const perfData = performance.getEntriesByType('navigation')[0];
+                if (perfData) {
+                    console.log('=== TEST CASE 3: Lottie with Lazy Loading ===');
+                    console.log('DOM Content Loaded:', Math.round(perfData.domContentLoadedEventEnd) + 'ms');
+                    console.log('Page Load Complete:', Math.round(perfData.loadEventEnd) + 'ms');
+                    console.log('Total Page Size:', Math.round(perfData.transferSize / 1024) + 'KB');
+                    console.log('');
+                    console.log('✅ IMPROVEMENTS:');
+                    console.log('  1. Only 1 animation loads initially');
+                    console.log('  2. Other 9 load when scrolled into view');
+                    console.log('  3. Intersection Observer (efficient)');
+                    console.log('  4. Resource hints added');
+                    console.log('');
+                    console.log('⚠️ STILL HAS:');
+                    console.log('  - Synchronous script loading (render-blocking)');
+                    console.log('');
+                    console.log('Next Step: Test at https://gtmetrix.com/');
+                    console.log('Expected Score: 92-94% (Grade A)');
+                    console.log('');
+                    console.log('💡 Scroll down to see lazy loading in action!');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+

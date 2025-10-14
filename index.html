@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lottie Performance Testing - Talty Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            padding: 40px 0;
+        }
+        
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .project-info {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .project-info h2 {
+            color: #333;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .objective {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2196F3;
+            margin: 20px 0;
+        }
+        
+        .test-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .test-case {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .test-case:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .test-case::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        .test-case.baseline::before { background: #4CAF50; }
+        .test-case.poor::before { background: #f44336; }
+        .test-case.partial::before { background: #ff9800; }
+        .test-case.optimal::before { background: #2196F3; }
+        
+        .test-case h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .test-case .meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .expected-score {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .score-excellent { background: #4CAF50; color: white; }
+        .score-poor { background: #f44336; color: white; }
+        .score-good { background: #ff9800; color: white; }
+        .score-target { background: #2196F3; color: white; }
+        
+        .test-case p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        .test-case .features {
+            list-style: none;
+            margin: 15px 0;
+        }
+        
+        .test-case .features li {
+            padding: 5px 0;
+            font-size: 14px;
+        }
+        
+        .test-case .features li::before {
+            content: '✅ ';
+            margin-right: 8px;
+        }
+        
+        .test-case.poor .features li::before {
+            content: '❌ ';
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .testing-tools {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .testing-tools h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .tool {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .tool h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .tool a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .tool a:hover {
+            text-decoration: underline;
+        }
+        
+        .instructions {
+            background: rgba(255,255,255,0.95);
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .instructions h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .back-button:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            padding: 40px 0;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+            
+            .test-cases {
+                grid-template-columns: 1fr;
+            }
+            
+            .test-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Lottie Performance Testing</h1>
+            <p>Talty WordPress Site - SVG to Lottie Migration Analysis</p>
+        </div>
+        
+        <div class="project-info">
+            <h2>Project Overview</h2>
+            <div class="objective">
+                <strong>Objective:</strong> Determine the optimal Lottie implementation that achieves <strong>95%+ performance scores</strong> on GTmetrix and Google PageSpeed, matching or exceeding the current SVG baseline (~96%).
+            </div>
+            <p><strong>Problem:</strong> Replacing animated SVGs with Lottie animations dropped page scores from ~96% to ~86% (-10 points).</p>
+            <p><strong>Solution:</strong> Test 5 different implementation approaches to find the optimal method.</p>
+        </div>
+        
+        <div class="test-cases">
+            <!-- Test Case 0: SVG Baseline -->
+            <div class="test-case baseline">
+                <h3>Test Case 0: SVG Baseline</h3>
+                <div class="meta">
+                    <span>Current Implementation</span>
+                    <span class="expected-score score-excellent">95-97%</span>
+                </div>
+                <p>Animated SVG using SMIL - your current approach that achieves ~96% scores.</p>
+                <ul class="features">
+                    <li>Inline SVG animations</li>
+                    <li>No external scripts</li>
+                    <li>Immediate rendering</li>
+                    <li>Lightweight (~5-15KB)</li>
+                </ul>
+                <div class="test-buttons">
+                    <a href="test-cases/00-baseline-svg.html" class="btn btn-primary" target="_blank">
+                        🚀 Test Page
+                    </a>
+                    <a href="https://gtmetrix.com/" class="btn btn-secondary" target="_blank">
+                        📊 GTmetrix
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Test Case 1: Poor Lottie -->
+            <div class="test-case poor">
+                <h3>Test Case 1: Poor Lottie Implementation</h3>
+                <div class="meta">
+                    <span>Demonstrates Problem</span>
+                    <span class="expected-score score-poor">85-88%</span>
+                </div>
+                <p>Poor Lottie implementation - shows what causes the 10-point score drop.</p>
+                <ul class="features">
+                    <li>Render-blocking script</li>
+                    <li>All animations load immediately</li>
+                    <li>No resource optimization</li>
+                    <li>High Total Blocking Time</li>
+                </ul>
+                <div class="test-buttons">
+                    <a href="test-cases/01-lottie-poor.html" class="btn btn-primary" target="_blank">
+                        🚀 Test Page
+                    </a>
+                    <a href="https://pagespeed.web.dev/" class="btn btn-secondary" target="_blank">
+                        📊 PageSpeed
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Test Case 2: Async Loading -->
+            <div class="test-case partial">
+                <h3>Test Case 2: Async Loading</h3>
+                <div class="meta">
+                    <span>Partial Optimization</span>
+                    <span class="expected-score score-good">90-93%</span>
+                </div>
+                <p>Async script loading with resource hints - fixes render-blocking issue.</p>
+                <ul class="features">
+                    <li>Async script loading</li>
+                    <li>Resource hints (preconnect)</li>
+                    <li>Deferred initialization</li>
+                    <li>Non-blocking rendering</li>
+                </ul>
+                <div class="test-buttons">
+                    <a href="test-cases/02-lottie-async.html" class="btn btn-primary" target="_blank">
+                        🚀 Test Page
+                    </a>
+                    <a href="https://gtmetrix.com/" class="btn btn-secondary" target="_blank">
+                        📊 GTmetrix
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Test Case 3: Lazy Loading -->
+            <div class="test-case partial">
+                <h3>Test Case 3: Lazy Loading</h3>
+                <div class="meta">
+                    <span>Partial Optimization</span>
+                    <span class="expected-score score-good">92-94%</span>
+                </div>
+                <p>Intersection Observer lazy loading - only loads visible animations.</p>
+                <ul class="features">
+                    <li>Lazy loading (scroll to trigger)</li>
+                    <li>Intersection Observer</li>
+                    <li>Reduced initial load</li>
+                    <li>Progressive enhancement</li>
+                </ul>
+                <div class="test-buttons">
+                    <a href="test-cases/03-lottie-lazy.html" class="btn btn-primary" target="_blank">
+                        🚀 Test Page
+                    </a>
+                    <a href="https://pagespeed.web.dev/" class="btn btn-secondary" target="_blank">
+                        📊 PageSpeed
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Test Case 4: Optimal -->
+            <div class="test-case optimal">
+                <h3>Test Case 4: Optimal Implementation</h3>
+                <div class="meta">
+                    <span>🎯 Target Solution</span>
+                    <span class="expected-score score-target">95-97%</span>
+                </div>
+                <p><strong>RECOMMENDED:</strong> Combines async loading + lazy loading for optimal performance.</p>
+                <ul class="features">
+                    <li>Async script loading</li>
+                    <li>Lazy loading with Intersection Observer</li>
+                    <li>Resource hints optimization</li>
+                    <li>Progressive loading enabled</li>
+                </ul>
+                <div class="test-buttons">
+                    <a href="test-cases/04-lottie-async-lazy.html" class="btn btn-primary" target="_blank">
+                        🚀 Test Page
+                    </a>
+                    <a href="https://gtmetrix.com/" class="btn btn-secondary" target="_blank">
+                        📊 GTmetrix
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="testing-tools">
+            <h2>🛠️ Testing Tools</h2>
+            <div class="tools-grid">
+                <div class="tool">
+                    <h3>GTmetrix</h3>
+                    <p>Primary testing tool for overall performance grades</p>
+                    <a href="https://gtmetrix.com/" target="_blank">Open GTmetrix →</a>
+                </div>
+                <div class="tool">
+                    <h3>PageSpeed Insights</h3>
+                    <p>Google's tool for Core Web Vitals and mobile scores</p>
+                    <a href="https://pagespeed.web.dev/" target="_blank">Open PageSpeed →</a>
+                </div>
+                <div class="tool">
+                    <h3>WebPageTest</h3>
+                    <p>Advanced testing with detailed waterfall charts</p>
+                    <a href="https://www.webpagetest.org/" target="_blank">Open WebPageTest →</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h2>📋 Testing Instructions</h2>
+            <ol>
+                <li><strong>Test Each Case:</strong> Click "🚀 Test Page" to open each test case in a new tab</li>
+                <li><strong>Verify Animations:</strong> Ensure all animations load and display correctly</li>
+                <li><strong>Run GTmetrix:</strong> Copy the test page URL to GTmetrix and run the test</li>
+                <li><strong>Run PageSpeed:</strong> Test both Desktop and Mobile versions</li>
+                <li><strong>Record Results:</strong> Use the TEST-RESULTS-TEMPLATE.md to document all scores</li>
+                <li><strong>Compare Performance:</strong> Identify which test case achieves 95%+ scores</li>
+                <li><strong>Make Recommendation:</strong> Document the optimal implementation approach</li>
+            </ol>
+            <p><strong>Success Criteria:</strong> Test Case 4 should achieve scores matching or exceeding Test Case 0 (SVG baseline).</p>
+        </div>
+        
+        <div class="footer">
+            <p>Lottie Performance Testing Project | Talty WordPress Site | October 2025</p>
+            <p>Deploy this entire folder to your web server for testing</p>
+        </div>
+    </div>
+    
+    <!-- Performance tracking for this index page -->
+    <script>
+        // Track page load performance
+        window.addEventListener('load', function() {
+            if (performance.getEntriesByType) {
+                const perfData = performance.getEntriesByType('navigation')[0];
+                if (perfData) {
+                    console.log('=== INDEX PAGE PERFORMANCE ===');
+                    console.log('Page Load Time:', Math.round(perfData.loadEventEnd) + 'ms');
+                    console.log('DOM Content Loaded:', Math.round(perfData.domContentLoadedEventEnd) + 'ms');
+                    console.log('');
+                    console.log('Ready to test! Click any "🚀 Test Page" button to begin.');
+                }
+            }
+        });
+        
+        // Add click tracking for test buttons
+        document.querySelectorAll('.btn-primary').forEach(button => {
+            button.addEventListener('click', function() {
+                const testCase = this.closest('.test-case').querySelector('h3').textContent;
+                console.log('🚀 Opening:', testCase);
+            });
+        });
+    </script>
+</body>
+</html>
