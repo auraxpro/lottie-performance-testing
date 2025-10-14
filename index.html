@@ -301,7 +301,7 @@
         
         // Open PageSpeed with the correct test URL
         function openPageSpeed(testFile) {
-            const currentPath = "https://lottie-performance-testing.vercel.app/";
+            const currentPath = "https://lottie-performance-testing.vercel.app";
             const fullUrl = currentPath + '/test-cases/' + testFile;
             const pageSpeedUrl = `https://pagespeed.web.dev/analysis?url=${encodeURIComponent(fullUrl)}`;
             window.open(pageSpeedUrl, '_blank');
