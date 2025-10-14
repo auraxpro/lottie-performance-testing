@@ -313,7 +313,8 @@
                 <strong>Objective:</strong> Determine the optimal Lottie implementation that achieves <strong>95%+ performance scores</strong> on GTmetrix and Google PageSpeed, matching or exceeding the current SVG baseline (~96%).
             </div>
             <p><strong>Problem:</strong> Replacing animated SVGs with Lottie animations dropped page scores from ~96% to ~86% (-10 points).</p>
-            <p><strong>Solution:</strong> Test 5 different implementation approaches to find the optimal method.</p>
+            <p><strong>Testing Approach:</strong> Using large, realistic animations (50-200KB each, ~1MB total) to simulate real-world corporate site usage.</p>
+            <p><strong>Solution:</strong> Test 5 different implementation approaches to find the optimal method for handling large animation files.</p>
         </div>
         
         <div class="test-cases">
@@ -348,12 +349,12 @@
                     <span>Demonstrates Problem</span>
                     <span class="expected-score score-poor">85-88%</span>
                 </div>
-                <p>Poor Lottie implementation - shows what causes the 10-point score drop.</p>
+                <p>Poor Lottie implementation with large animations (50-200KB each) - shows what causes the 10-point score drop.</p>
                 <ul class="features">
-                    <li>Render-blocking script</li>
-                    <li>All animations load immediately</li>
+                    <li>Render-blocking script (~96KB)</li>
+                    <li>10 large animations load immediately (~1MB total)</li>
                     <li>No resource optimization</li>
-                    <li>High Total Blocking Time</li>
+                    <li>Very high Total Blocking Time</li>
                 </ul>
                 <div class="test-buttons">
                     <a href="test-cases/01-lottie-poor.html" class="btn btn-primary" target="_blank">
@@ -372,12 +373,12 @@
                     <span>Partial Optimization</span>
                     <span class="expected-score score-good">90-93%</span>
                 </div>
-                <p>Async script loading with resource hints - fixes render-blocking issue.</p>
+                <p>Async script loading with large animations - fixes render-blocking but still loads all animations.</p>
                 <ul class="features">
-                    <li>Async script loading</li>
+                    <li>Async script loading (non-blocking)</li>
                     <li>Resource hints (preconnect)</li>
                     <li>Deferred initialization</li>
-                    <li>Non-blocking rendering</li>
+                    <li>Still loads ~1MB of animations</li>
                 </ul>
                 <div class="test-buttons">
                     <a href="test-cases/02-lottie-async.html" class="btn btn-primary" target="_blank">
@@ -396,12 +397,12 @@
                     <span>Partial Optimization</span>
                     <span class="expected-score score-good">92-94%</span>
                 </div>
-                <p>Intersection Observer lazy loading - only loads visible animations.</p>
+                <p>Intersection Observer lazy loading - only loads 1 large animation initially (~120KB).</p>
                 <ul class="features">
                     <li>Lazy loading (scroll to trigger)</li>
                     <li>Intersection Observer</li>
-                    <li>Reduced initial load</li>
-                    <li>Progressive enhancement</li>
+                    <li>Only ~120KB loads initially</li>
+                    <li>Other 9 animations load on demand</li>
                 </ul>
                 <div class="test-buttons">
                     <a href="test-cases/03-lottie-lazy.html" class="btn btn-primary" target="_blank">
@@ -420,12 +421,12 @@
                     <span>🎯 Target Solution</span>
                     <span class="expected-score score-target">95-97%</span>
                 </div>
-                <p><strong>RECOMMENDED:</strong> Combines async loading + lazy loading for optimal performance.</p>
+                <p><strong>RECOMMENDED:</strong> Combines async + lazy loading for optimal performance with large animations.</p>
                 <ul class="features">
-                    <li>Async script loading</li>
-                    <li>Lazy loading with Intersection Observer</li>
+                    <li>Async script loading (non-blocking)</li>
+                    <li>Lazy loading (only ~120KB initially)</li>
                     <li>Resource hints optimization</li>
-                    <li>Progressive loading enabled</li>
+                    <li>Handles 1MB+ of animations efficiently</li>
                 </ul>
                 <div class="test-buttons">
                     <a href="test-cases/04-lottie-async-lazy.html" class="btn btn-primary" target="_blank">
