@@ -101,7 +101,7 @@
         <div class="container">
             <div class="animation-container" id="hero-animation"></div>
             <h2>Performance Test Page</h2>
-            <p>10 Lottie animations loading with poor implementation</p>
+            <p>4 Lottie animations loading with poor implementation</p>
         </div>
     </div>
 
@@ -110,43 +110,13 @@
         <div class="features">
             <div class="feature">
                 <div class="feature-icon" id="feature-1"></div>
-                <h3>Animation 1</h3>
-                <p>Lottie animation</p>
+                <h3>Feature 1</h3>
+                <p>Lottie animation loading synchronously</p>
             </div>
             <div class="feature">
                 <div class="feature-icon" id="feature-2"></div>
-                <h3>Animation 2</h3>
-                <p>Lottie animation</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon" id="feature-3"></div>
-                <h3>Animation 3</h3>
-                <p>Lottie animation</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon" id="feature-4"></div>
-                <h3>Animation 4</h3>
-                <p>Lottie animation</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon" id="feature-5"></div>
-                <h3>Animation 5</h3>
-                <p>Lottie animation</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon" id="feature-6"></div>
-                <h3>Animation 6</h3>
-                <p>Lottie animation</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon" id="feature-7"></div>
-                <h3>Animation 7</h3>
-                <p>Lottie animation</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon" id="feature-8"></div>
-                <h3>Animation 8</h3>
-                <p>Lottie animation</p>
+                <h3>Feature 2</h3>
+                <p>Lottie animation loading synchronously</p>
             </div>
         </div>
     </div>
@@ -155,8 +125,8 @@
     <div class="cta">
         <div class="container">
             <div class="cta-icon" id="cta-animation"></div>
-            <h2>Animation 9</h2>
-            <p>Final Lottie animation</p>
+            <h2>Call to Action</h2>
+            <p>Final animation with blocking script</p>
         </div>
     </div>
 
@@ -165,16 +135,12 @@
         All animations start loading right away, blocking main thread
     -->
     <script>
-        // Local Lottie Animation Files
+        // Local Lottie Animation Files (reduced to 4 to prevent PageSpeed crash)
         const animations = [
             './lottie/Ball_playing.json',
             './lottie/Bouncing_Square.json',
             './lottie/Car_dashboard_HUD_UI.json',
-            './lottie/Free_Interactive_Fish_Game.json',
-            './lottie/Interactive_Mage_animation.json',
-            './lottie/Like_Reply_Share.json',
-            './lottie/Mail_Box.json',
-            './lottie/Ball_playing.json'
+            './lottie/Interactive_Mage_animation.json'
         ];
 
         // PROBLEM: Loading all animations immediately, during page parse
@@ -202,60 +168,13 @@
             path: animations[2]
         });
 
-        lottie.loadAnimation({
-            container: document.getElementById('feature-3'),
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            path: animations[3]
-        });
-
-        lottie.loadAnimation({
-            container: document.getElementById('feature-4'),
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            path: animations[4]
-        });
-
-        lottie.loadAnimation({
-            container: document.getElementById('feature-5'),
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            path: animations[5]
-        });
-
-        lottie.loadAnimation({
-            container: document.getElementById('feature-6'),
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            path: animations[6]
-        });
-
-        lottie.loadAnimation({
-            container: document.getElementById('feature-7'),
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            path: animations[7]
-        });
-
-        lottie.loadAnimation({
-            container: document.getElementById('feature-8'),
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            path: animations[0]
-        });
-
+        // Animation 4: CTA section
         lottie.loadAnimation({
             container: document.getElementById('cta-animation'),
             renderer: 'svg',
             loop: true,
             autoplay: true,
-            path: animations[1]
+            path: animations[3]
         });
     </script>
 
@@ -275,12 +194,12 @@
                     console.log('');
                     console.log('❌ PROBLEMS IDENTIFIED:');
                     console.log('  1. Synchronous script loading (render-blocking)');
-                    console.log('  2. All 10 animations load immediately');
+                    console.log('  2. All 4 animations load immediately (no lazy loading)');
                     console.log('  3. No resource hints (preconnect/dns-prefetch)');
                     console.log('  4. Animations initialize during page parse');
                     console.log('');
                     console.log('Next Step: Test at https://gtmetrix.com/');
-                    console.log('Expected Score: 85-88% (Grade B/C)');
+                    console.log('Expected Score: 80-88% (Grade B/C)');
                 }
             }
         });
